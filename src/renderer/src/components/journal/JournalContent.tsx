@@ -21,6 +21,7 @@ interface JournalContentProps {
   onImageResize?: (id: string, width: number, height?: number, top?: number, left?: number) => void;
   onAddNewRootBullet?: () => void;
   onAddCollapsibleBullet?: (parentId?: string) => void;
+  onOutdent?: (id: string) => void;
 }
 
 const JournalContent: React.FC<JournalContentProps> = ({
@@ -38,7 +39,8 @@ const JournalContent: React.FC<JournalContentProps> = ({
   onDeleteVideo,
   onImageResize,
   onAddNewRootBullet,
-  onAddCollapsibleBullet
+  onAddCollapsibleBullet,
+  onOutdent
 }) => {
   // Convert BulletItemType to BulletItemProps for each bullet
   const convertToBulletItemProps = (bullet: BulletItemType): BulletItemProps => {
@@ -60,7 +62,8 @@ const JournalContent: React.FC<JournalContentProps> = ({
       images,
       videos,
       onImageResize,
-      onAddCollapsibleBullet
+      onAddCollapsibleBullet,
+      onOutdent
     };
   };
 
@@ -77,6 +80,7 @@ const JournalContent: React.FC<JournalContentProps> = ({
           onDeleteImage={onDeleteImage}
           onDeleteVideo={onDeleteVideo}
           videos={videos}
+          onOutdent={onOutdent}
         />
       ))}
       

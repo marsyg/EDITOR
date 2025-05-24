@@ -1,5 +1,5 @@
 {
-  "name": "flowy-scribe-journal",
+  "name": "S-REBOOT",
   "main": "./out/main/main.js",
   "private": true,
   "version": "0.0.0",
@@ -88,21 +88,22 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "electron": "^36.2.1",
+    "electron-rebuild": "^3.2.9",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.11",
-    "typescript": "^5.5.3",
+    "typescript": "^4.9.5",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1",
     "electron-builder": "^26.0.12"
   },
   "description": "Personalized Editor",
-  "author": "Maz",
+  "author": "Maaz",
   "build": {
-    "productName": "S-REBBOt",
+    "productName": "S-REBOOT",
     "files": [
       "out/**/*"
     ],

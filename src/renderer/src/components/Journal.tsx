@@ -83,6 +83,8 @@ const Journal: React.FC<JournalProps> = ({
     handleImageUpload,
     handleImageResize,
     handleVideoUpload,
+    deleteImage,
+    deleteVideo,
     addNewRootBullet,
     addCollapsibleBullet,
     exportToJson,
@@ -91,6 +93,7 @@ const Journal: React.FC<JournalProps> = ({
     publishJournal,
     deleteJournal,
     loadJournal,
+    handleOutdent,
   } = useJournalState(initialTitle, initialContent, journalId);
 
   // Keep the effect to handle title updates
@@ -138,6 +141,9 @@ const Journal: React.FC<JournalProps> = ({
           onSave={saveJournalLocally}
           onPublish={publishJournal}
           onDeleteJournal={deleteJournal}
+          onOutdent={handleOutdent}
+          onDeleteImage={deleteImage}
+          onDeleteVideo={deleteVideo}
           journalId={journalId}
         />
       )}
@@ -161,6 +167,7 @@ const Journal: React.FC<JournalProps> = ({
           onToggleCollapse={handleToggleCollapse}
           onImageUpload={handleImageUpload}
           onVideoUpload={handleVideoUpload}
+          onDeleteVideo={deleteVideo}
           onImageResize={handleImageResize}
           onAddNewRootBullet={addNewRootBullet}
           onAddCollapsibleBullet={addCollapsibleBullet}

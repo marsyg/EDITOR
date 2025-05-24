@@ -144,13 +144,45 @@ const BulletItem: React.FC<BulletItemProps> = ({
         onAddChild(id);
       }
     } else if (e.key === "Backspace") {
-      // Add a small delay to ensure content state is updated
-      requestAnimationFrame(() => {
-        if (contentRef.current?.innerHTML === "") {
-          e.preventDefault();
-          onDelete(id);
-        }
-      });
+      // Check if content is empty or only contains empty tags/whitespace
+      const isEmpty = () => {
+        const element = contentRef.current;
+        if (!element) return false;
+        
+        // Check if it's totally empty
+        if (element.innerHTML === "") return true;
+        
+        // Check if it only contains whitespace or empty tags
+        // This will handle cases like "<div></div>", "<br>", "&nbsp;", etc.
+        const strippedContent = element.innerText.trim();
+        return strippedContent === "";
+      };
+      
+      // Check if cursor is at the beginning of the content
+      const isCursorAtBeginning = () => {
+        const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0) return false;
+        
+        const range = selection.getRangeAt(0);
+        return range.startOffset === 0 && range.collapsed;
+      };
+      
+      // If content is empty, delete the bullet immediately
+      if (isEmpty()) {
+        e.preventDefault();
+        onDelete(id);
+        return;
+      }
+      
+      // If cursor is at beginning and backspace is pressed, we'll check if content is empty after the keypress
+      if (isCursorAtBeginning()) {
+        // We need to wait for the default backspace behavior to take effect, then check if it's empty
+        setTimeout(() => {
+          if (isEmpty()) {
+            onDelete(id);
+          }
+        }, 0);
+      }
     }
   };
 

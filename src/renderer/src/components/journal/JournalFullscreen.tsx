@@ -2,7 +2,7 @@ import React from "react";
 import { DialogContent, DialogHeader, DialogTitle } from "../../components/ui/dialog";
 import JournalContent from "./JournalContent";
 import JournalToolbar from "./JournalToolbar";
-import { BulletItemType, JournalImage } from "../../types/journal";
+import { BulletItemType, JournalImage, JournalVideo } from "../../types/journal";
 
 interface JournalFullscreenProps {
   title: string;
@@ -15,9 +15,12 @@ interface JournalFullscreenProps {
   onToggleCollapse: (id: string) => void;
   onImageUpload: (id: string, file: File) => void;
   onImageResize: (imageId: string, width: number, height?: number, top?: number, left?: number) => void;
+  onVideoUpload: (id: string, file: File) => void;
+  onDeleteVideo: (videoId: string, videoUrl: string) => Promise<void>;
   onAddNewRootBullet: () => void;
   onAddCollapsibleBullet: () => void;
   images: JournalImage[];
+  videos: JournalVideo[];
   setIsFullscreen: (isFullscreen: boolean) => void;
   onExport: () => void;
   onExportOPML: () => void;
@@ -40,9 +43,12 @@ const JournalFullscreen: React.FC<JournalFullscreenProps> = ({
   onToggleCollapse,
   onImageUpload,
   onImageResize,
+  onVideoUpload,
+  onDeleteVideo,
   onAddNewRootBullet,
   onAddCollapsibleBullet,
   images,
+  videos,
   setIsFullscreen,
   onExport,
   onExportOPML,
@@ -86,9 +92,12 @@ const JournalFullscreen: React.FC<JournalFullscreenProps> = ({
             onToggleCollapse={onToggleCollapse}
             onImageUpload={onImageUpload}
             onImageResize={onImageResize}
+            onVideoUpload={onVideoUpload}
+            onDeleteVideo={onDeleteVideo}
             onAddNewRootBullet={onAddNewRootBullet}
             onAddCollapsibleBullet={onAddCollapsibleBullet}
             images={images}
+            videos={videos}
           />
         </div>
       </div>

@@ -139,13 +139,35 @@ const Posts = () => {
       }, {});
       
       // Format journals with additional data
-      const formattedJournals = data.map((journal: any) => ({
-        ...journal,
-        username: usersMap[journal.user_id]?.username || "Anonymous",
-        full_name: usersMap[journal.user_id]?.full_name || "Anonymous User",
-        likes: Math.floor(Math.random() * 50), // Placeholder for demo
-        comments: commentsCountMap[journal.id] || 0,
-      }));
+      const formattedJournals = data.map((journal: any) => {
+        // Parse and structure the content properly
+        let parsedContent;
+        try {
+          if (typeof journal.content === 'string') {
+            parsedContent = JSON.parse(journal.content);
+          } else {
+            parsedContent = journal.content || {};
+          }
+          
+          // Ensure content has required structure
+          journal.content = {
+            bullets: Array.isArray(parsedContent.bullets) ? parsedContent.bullets : [],
+            images: Array.isArray(parsedContent.images) ? parsedContent.images : [],
+            videos: Array.isArray(parsedContent.videos) ? parsedContent.videos : []
+          };
+        } catch (e) {
+          console.error("Error parsing journal content:", e, journal.id);
+          journal.content = { bullets: [], images: [], videos: [] };
+        }
+        
+        return {
+          ...journal,
+          username: usersMap[journal.user_id]?.username || "Anonymous",
+          full_name: usersMap[journal.user_id]?.full_name || "Anonymous User",
+          likes: Math.floor(Math.random() * 50), // Placeholder for demo
+          comments: commentsCountMap[journal.id] || 0,
+        };
+      });
       
       setJournals(formattedJournals);
     } catch (error) {

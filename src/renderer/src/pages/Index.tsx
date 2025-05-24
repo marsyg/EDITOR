@@ -511,11 +511,21 @@ const Index = () => {
         console.log('loadJournalContent: Found local journal:', localJournal);
         let content;
         try {
-          // Check if content is already an object or needs parsing
-          content =
-            typeof localJournal.content === 'string'
-              ? JSON.parse(String(localJournal.content))
-              : localJournal.content; // Assume it's already an object
+          // Parse or process the content
+          let parsedContent;
+          if (typeof localJournal.content === 'string') {
+            parsedContent = JSON.parse(String(localJournal.content));
+          } else {
+            parsedContent = localJournal.content || {};
+          }
+          
+          // Ensure content has required structure
+          content = {
+            bullets: Array.isArray(parsedContent.bullets) ? parsedContent.bullets : [],
+            images: Array.isArray(parsedContent.images) ? parsedContent.images : [],
+            videos: Array.isArray(parsedContent.videos) ? parsedContent.videos : []
+          };
+          
           console.log(
             'loadJournalContent: Parsed local journal content:',
             content
@@ -525,7 +535,7 @@ const Index = () => {
             'loadJournalContent: Error parsing local journal content:',
             e
           );
-          content = { bullets: [], images: [] };
+          content = { bullets: [], images: [], videos: [] };
         }
         console.log(
           'loadJournalContent: Setting activeJournalContent for local journal:',
@@ -548,7 +558,20 @@ const Index = () => {
         let content;
         try {
           // Parse the content string from the database
-          content = JSON.parse(String(data.content));
+          let parsedContent;
+          if (typeof data.content === 'string') {
+            parsedContent = JSON.parse(String(data.content));
+          } else {
+            parsedContent = data.content || {};
+          }
+          
+          // Ensure content has required structure
+          content = {
+            bullets: Array.isArray(parsedContent.bullets) ? parsedContent.bullets : [],
+            images: Array.isArray(parsedContent.images) ? parsedContent.images : [],
+            videos: Array.isArray(parsedContent.videos) ? parsedContent.videos : []
+          };
+          
           console.log(
             'loadJournalContent: Parsed online journal content:',
             content
@@ -558,7 +581,7 @@ const Index = () => {
             'loadJournalContent: Error parsing online journal content:',
             e
           );
-          content = { bullets: [], images: [] };
+          content = { bullets: [], images: [], videos: [] };
         }
         console.log(
           'loadJournalContent: Setting activeJournalContent for online journal:',

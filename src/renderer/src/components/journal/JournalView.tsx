@@ -237,7 +237,10 @@ const JournalView: React.FC<JournalViewProps> = ({ content, onDeleteImage, onDel
                 </div>
                 <div className="flex-grow">
                   {/* Bullet content */}
-                  <div className="whitespace-pre-wrap">{bullet.content}</div>
+                  <div 
+                    className="whitespace-pre-wrap"
+                    dangerouslySetInnerHTML={{ __html: bullet.content }}
+                  />
                   
                   {/* Images associated with this bullet */}
                   {bulletImages.map((image) => (
@@ -287,11 +290,11 @@ const JournalView: React.FC<JournalViewProps> = ({ content, onDeleteImage, onDel
   };
 
   return (
-    <div className="journal-view">
+    <div className="journal-view prose prose-lg max-w-none">
       {bullets.length > 0 ? (
         renderBullets(bullets)
       ) : (
-        <div className="text-gray-500 italic">This journal is empty.</div>
+        <div className="text-gray-500 italic p-4">This journal is empty.</div>
       )}
     </div>
   );

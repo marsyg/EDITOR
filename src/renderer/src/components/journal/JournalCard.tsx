@@ -36,6 +36,7 @@ interface JournalCardProps {
   onSave: () => Promise<void>;
   onPublish: () => Promise<void>;
   onDeleteJournal: (journalId: string) => Promise<boolean>;
+  onOutdent: (id: string) => void;
   journalId: string;
 }
 
@@ -56,10 +57,10 @@ export const JournalCard: React.FC<JournalCardProps> = ({
   onDelete,
   onAddBulletAfter,
   onToggleCollapse,
-  onImageUpload,
-  onVideoUpload,
   onDeleteImage,
   onDeleteVideo,
+  onImageUpload,
+  onVideoUpload,
   onImageResize,
   addNewRootBullet,
   addCollapsibleBullet,
@@ -68,6 +69,7 @@ export const JournalCard: React.FC<JournalCardProps> = ({
   onSave,
   onPublish,
   onDeleteJournal,
+  onOutdent,
   journalId,
 }) => {
   console.log('=== JournalCard Render ===');
@@ -175,6 +177,7 @@ export const JournalCard: React.FC<JournalCardProps> = ({
           onImageResize={onImageResize}
           onAddNewRootBullet={addNewRootBullet}
           onAddCollapsibleBullet={addCollapsibleBullet}
+          onOutdent={onOutdent}
         />
       </CardContent>
     </Card>

@@ -2,7 +2,7 @@ import { Button } from '../components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { supabase } from '../integrations/supabase/client';
-
+import newPlaceHolder from  '../../../../public/newPlaceHolder.jpg'
 const Landing = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -84,12 +84,12 @@ const Landing = () => {
           <div className='relative z-10 text-center'>
             <div className='w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 bg-white/20 backdrop-blur-md ring-4 ring-white/20 shadow-lg'>
               <img
-                src='/newPlaceHolder.svg'
+                src={newPlaceHolder}
                 alt='Profile'
                 className='w-full h-full object-cover'
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  target.src = '/newPlaceHolder.jpg';
+                  target.src = './newPlaceHolder.svg';
                 }}
               />
             </div>
