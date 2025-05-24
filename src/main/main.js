@@ -46,7 +46,19 @@ ipcMain.handle('get-journal', async (event, id) => {
     }
     const journal = journalOperations.getJournalById(id);
     console.log('Main process: Journal retrieved from DB:', journal);
-    // The content from the DB *should* be a string. Send it as is to the renderer for parsing.
+    
+    // Parse the content JSON string back to an object if it exists
+    if (journal && journal.content && typeof journal.content === 'string') {
+      try {
+        journal.content = JSON.parse(journal.content);
+        console.log('Main process: Parsed content from JSON string to object');
+      } catch (parseError) {
+        console.error('Main process: Error parsing journal content JSON:', parseError);
+        // Provide a default content structure if parsing fails
+        journal.content = { bullets: [], images: [], videos: [] };
+      }
+    }
+    
     return journal;
   } catch (error) {
     console.error('Main process: Error getting journal:', error);
@@ -62,7 +74,23 @@ ipcMain.handle('get-all-journals', async () => {
       'Main process: Journals retrieved successfully from DB:',
       journals
     );
-    // The content from the DB *should* be a string. Send it as is to the renderer for parsing.
+    
+    // Parse the content JSON string back to an object for each journal
+    if (journals && Array.isArray(journals)) {
+      journals.forEach(journal => {
+        if (journal.content && typeof journal.content === 'string') {
+          try {
+            journal.content = JSON.parse(journal.content);
+          } catch (parseError) {
+            console.error(`Main process: Error parsing content for journal ${journal.id}:`, parseError);
+            // Provide a default content structure if parsing fails
+            journal.content = { bullets: [], images: [], videos: [] };
+          }
+        }
+      });
+      console.log('Main process: Parsed all journal content from JSON strings to objects');
+    }
+    
     return journals;
   } catch (error) {
     console.error('Main process: Error getting all journals:', error);
@@ -77,6 +105,13 @@ ipcMain.handle('create-journal', async (event, journal) => {
       throw new Error('Invalid journal data');
     }
     const newJournal = { ...journal, id: uuidv4() };
+    
+    // Convert content object to JSON string if it's an object
+    if (newJournal.content && typeof newJournal.content === 'object') {
+      newJournal.content = JSON.stringify(newJournal.content);
+      console.log('Main process: Stringified content for SQLite storage');
+    }
+    
     const result = journalOperations.createJournal(newJournal);
     console.log('Main process: Journal created successfully:', result);
     return result;
@@ -92,7 +127,17 @@ ipcMain.handle('update-journal', async (event, journal) => {
     if (!journal || !journal.id) {
       throw new Error('Invalid journal data');
     }
-    const result = journalOperations.updateJournal(journal);
+    
+    // Create a copy of the journal object to avoid modifying the original
+    const journalToSave = { ...journal };
+    
+    // Convert content object to JSON string if it's an object
+    if (journalToSave.content && typeof journalToSave.content === 'object') {
+      journalToSave.content = JSON.stringify(journalToSave.content);
+      console.log('Main process: Stringified content for SQLite storage');
+    }
+    
+    const result = journalOperations.updateJournal(journalToSave);
     console.log('Main process: Journal updated successfully:', result);
     return result;
   } catch (error) {
@@ -122,7 +167,17 @@ ipcMain.handle('auto-save-journal', async (event, journal) => {
     if (!journal || !journal.id) {
       throw new Error('Invalid journal data');
     }
-    const result = journalOperations.autoSaveJournal(journal);
+    
+    // Create a copy of the journal object to avoid modifying the original
+    const journalToSave = { ...journal };
+    
+    // Convert content object to JSON string if it's an object
+    if (journalToSave.content && typeof journalToSave.content === 'object') {
+      journalToSave.content = JSON.stringify(journalToSave.content);
+      console.log('Main process: Stringified content for SQLite storage');
+    }
+    
+    const result = journalOperations.autoSaveJournal(journalToSave);
     console.log('Main process: Journal auto-saved successfully:', result);
     return result;
   } catch (error) {
